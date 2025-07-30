@@ -1,0 +1,268 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - Islamic Quiz</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: linear-gradient(145deg, #1c1c1c, #2d2d2d);
+      color: #ffffff;
+      min-height: 100vh;
+      padding: 20px;
+      background-image: url('https://wallpaperaccess.com/full/3104346.jpg');
+      background-size: cover;
+      background-position: center;
+      backdrop-filter: blur(5px);
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+      backdrop-filter: blur(10px);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 32px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+    th {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    .btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 13px;
+      color: white;
+    }
+    .btn-approve {
+      background-color: #28a745;
+    }
+    .btn-reject {
+      background-color: #dc3545;
+    }
+  </style>
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - Islamic Quiz</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: linear-gradient(145deg, #1c1c1c, #2d2d2d);
+      color: #ffffff;
+      min-height: 100vh;
+      padding: 20px;
+      background-image: url('https://wallpaperaccess.com/full/3104346.jpg');
+      background-size: cover;
+      background-position: center;
+      backdrop-filter: blur(5px);
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+      backdrop-filter: blur(10px);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 32px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+    th {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    tr:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    .btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 13px;
+      color: white;
+    }
+    .btn-approve {
+      background-color: #28a745;
+    }
+    .btn-reject {
+      background-color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Panel - Islamic Quiz</h1>
+    <div id="userTableContainer">Loading users...</div>
+  </div>  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCOTwS-H0NQmj6-jDNAlFzu4Yv81f86tTU",
+      authDomain: "islamic-quiz-fe72f.firebaseapp.com",
+      databaseURL: "https://islamic-quiz-fe72f-default-rtdb.firebaseio.com",
+      projectId: "islamic-quiz-fe72f",
+      storageBucket: "islamic-quiz-fe72f.appspot.com",
+      messagingSenderId: "523541510921",
+      appId: "1:523541510921:web:b78005ef3bc1f1a14a31d8"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase();
+    const auth = getAuth();
+
+    signInWithEmailAndPassword(auth, "sahilwebsite6@gmail.com", "Sahil38@")
+      .then(() => {
+        const usersRef = ref(db, "users");
+        onValue(usersRef, (snapshot) => {
+          const users = snapshot.val();
+          let html = `<table><tr><th>Name</th><th>Email</th><th>WhatsApp</th><th>Plan</th><th>Daily</th><th>Total</th><th>Referrals</th><th>Account</th><th>IP</th><th>Device</th><th>Payment</th><th>Approve</th></tr>`;
+          for (let uid in users) {
+            const u = users[uid];
+            html += `<tr>
+              <td>${u.fullName || ''}</td>
+              <td>${u.email || ''}</td>
+              <td>${u.whatsapp || ''}</td>
+              <td>${u.selectedPlan || ''}</td>
+              <td>${u.dailyEarning || '0'}</td>
+              <td>${u.totalEarning || '0'}</td>
+              <td>${u.eferrals || '0'}</td>
+              <td>${u.accountType || ''}</td>
+              <td>${u.ipAddress || ''}</td>
+              <td>${u.deviceInfo || ''}</td>
+              <td>${u.paymentStatus || 'pending'}</td>
+              <td>
+                <button class='btn btn-approve' onclick='approveUser("${uid}")'>Approve</button>
+                <button class='btn btn-reject' onclick='rejectUser("${uid}")'>Reject</button>
+              </td>
+            </tr>`;
+          }
+          html += '</table>';
+          document.getElementById("userTableContainer").innerHTML = html;
+        });
+      })
+      .catch(error => {
+        document.body.innerHTML = `<h2 style="text-align:center; color:red;">Access Denied</h2><p style="text-align:center;">${error.message}</p>`;
+      });
+
+    window.approveUser = function(uid) {
+      const userRef = ref(db, `users/${uid}`);
+      update(userRef, {
+        isActive: true,
+        paymentApproved: true,
+        paymentStatus: "approved"
+      });
+      alert("User Approved!");
+    }
+
+    window.rejectUser = function(uid) {
+      const userRef = ref(db, `users/${uid}`);
+      update(userRef, {
+        isActive: false,
+        paymentApproved: false,
+        paymentStatus: "rejected"
+      });
+      alert("User Rejected!");
+    }
+  </script></body>
+</html>￼Enter</head>
+<body>
+  <div class="container">
+    <h1>Admin Panel - Islamic Quiz</h1>
+    <div id="userTableContainer">Loading users...</div>
+  </div>  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCOTwS-H0NQmj6-jDNAlFzu4Yv81f86tTU",
+      authDomain: "islamic-quiz-fe72f.firebaseapp.com",
+      databaseURL: "https://islamic-quiz-fe72f-default-rtdb.firebaseio.com",
+      projectId: "islamic-quiz-fe72f",
+      storageBucket: "islamic-quiz-fe72f.appspot.com",
+      messagingSenderId: "523541510921",
+      appId: "1:523541510921:web:b78005ef3bc1f1a14a31d8"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase();
+    const auth = getAuth();
+
+    signInWithEmailAndPassword(auth, "sahilwebsite6@gmail.com", "Sahil38@")
+      .then(() => {
+  const usersRef = ref(db, "users");
+        onValue(usersRef, (snapshot) => {
+          const users = snapshot.val();
+          let html = `<table><tr><th>Name</th><th>Email</th><th>WhatsApp</th><th>Plan</th><th>Daily</th><th>Total</th><th>Referrals</th><th>Account</th><th>IP</th><th>Device</th><th>Payment</th><th>Approve</th></tr>`;
+          for (let uid in users) {
+            const u = users[uid];
+            html += `<tr>
+              <td>${u.fullName || ''}</td>
+              <td>${u.email || ''}</td>
+              <td>${u.whatsapp || ''}</td>
+              <td>${u.selectedPlan || ''}</td>
+              <td>${u.dailyEarning || '0'}</td>
+              <td>${u.totalEarning || '0'}</td>
+              <td>${u.eferrals || '0'}</td>
+              <td>${u.accountType || ''}</td>
+              <td>${u.ipAddress || ''}</td>
+              <td>${u.deviceInfo || ''}</td>
+              <td>${u.paymentStatus || 'pending'}</td>
+              <td>
+                <button class='btn btn-approve' onclick='approveUser("${uid}")'>Approve</button>
+                <button class='btn btn-reject' onclick='rejectUser("${uid}")'>Reject</button>
+              </td>
+            </tr>`;
+          }
+          html += '</table>';
+          document.getElementById("userTableContainer").innerHTML = html;
